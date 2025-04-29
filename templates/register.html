@@ -1,0 +1,21 @@
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    message = ""
+    if request.method == 'POST':
+        full_name = request.form['full_name'].strip()
+        email = request.form['email'].strip()
+        password = request.form['password'].strip()
+        hashed_password = generate_password_hash(password)  # Securely hash password
+
+        # Check if user already exists
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            message = "Email already registered!"
+        else:
+            # Create new user
+            new_user = User(full_name=full_name, email=email, password=hashed_password, role="user")
+            db.session.add(new_user)
+            db.session.commit()
+            message = "Registration successful! Please log in."
+
+    return render_template('register.html', message=message)

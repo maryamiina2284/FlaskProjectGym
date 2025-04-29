@@ -1,0 +1,134 @@
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+  <div class="app-brand demo">
+      <a href="{{ url_for('index') }}" class="app-brand-link">
+          <div style="display: flex; align-items: center;">
+              <span class="app-brand-logo demo me-1">
+                  <i class="bx bx-dumbbell" style="font-size: 50px; color: var(--bs-primary);"></i>
+              </span>
+              <span class="app-brand-text demo menu-text fw-semibold ms-2">Reza GYM</span>
+          </div>
+      </a>
+
+      <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+          <i class="bx bx-chevron-left bx-sm d-flex align-items-center justify-content-center"></i>
+      </a>
+  </div>
+
+  <div class="menu-inner-shadow"></div>
+
+  <ul class="menu-inner py-1">
+      <!-- Dashboards -->
+      <li class="menu-item active open">
+          <a href="{{ url_for('index') }}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-smile"></i>
+              <div class="text-truncate" data-i18n="Dashboards">Dashboards</div>
+          </a>
+      </li>
+
+      <li class="menu-item">
+          <a href="{{ url_for('members') }}" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-group"></i>
+              <div class="text-truncate" data-i18n="Account Settings">Members</div>
+          </a>
+          <ul class="menu-sub">
+              <li class="menu-item">
+                  <a href="{{ url_for('members') }}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Account">All Members</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="{{ url_for('memberships') }}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Notifications">Memberships</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="{{ url_for('schedule') }}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Connections">Schedule</div>
+                  </a>
+              </li>
+          </ul>
+      </li>
+
+      <li class="menu-item">
+          <a href="{{ url_for('trainers') }}" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-run" style="font-size: 27px;"></i>
+              <div class="text-truncate" data-i18n="Account Settings">Trainers</div>
+          </a>
+          <ul class="menu-sub">
+              <li class="menu-item">
+                  <a href="{{ url_for('trainers') }}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Account">All Trainers</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="{{ url_for('classes') }}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Notifications">Class</div>
+                  </a>
+              </li>
+          </ul>
+      </li>
+
+      <li class="menu-item">
+          <a href="{{ url_for('equipments') }}" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-dumbbell"></i>
+              <div class="text-truncate" data-i18n="Account Settings">Equipments</div>
+          </a>
+          <ul class="menu-sub">
+              <li class="menu-item">
+                  <a href="{{ url_for('equipments') }}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Account Settings">Equipment</div>
+                  </a>
+              </li>
+          </ul>
+      </li>
+
+      <li class="menu-item">
+          <a href="{{ url_for('charges') }}" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-dollar" style="font-size: 27px;"></i>
+              <div class="text-truncate" data-i18n="Account Settings">Payment</div>
+          </a>
+          <ul class="menu-sub">
+              <li class="menu-item">
+                  <a href="{{ url_for('charges') }}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Account Settings">Charge</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="{{ url_for('income') }}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Account Settings">Income</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="{{ url_for('bank') }}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Account Settings">Bank</div>
+                  </a>
+              </li>
+          </ul>
+      </li>
+
+      <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+              <div class="text-truncate" data-i18n="Authentications">Authentications</div>
+          </a>
+          <ul class="menu-sub">
+              <li class="menu-item">
+                  <a href="{{ url_for('login') }}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Basic">Login</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="{{ url_for('users') }}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Basic">Users</div>
+                  </a>
+              </li>
+              <li class="menu-item">
+                  <a href="{{ url_for('forgot_password') }}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Basic">Forgot Password</div>
+                  </a>
+              </li>
+          </ul>
+      </li>
+
+  </ul>
+</aside>

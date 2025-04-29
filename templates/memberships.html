@@ -1,0 +1,171 @@
+<!-- Header -->
+{% include 'layouts/header.html' %}
+<!-- /Header -->
+
+
+
+<body>
+
+  <!-- Sidebar -->
+  {% include 'layouts/sidebar.html' %}
+  <!-- /Sidebar -->
+
+  <!-- Topbar -->
+  {% include 'layouts/topbar.html' %}
+  <!-- /Topbar -->
+
+  <div class="container-fluid">
+      <h1 class="h3 mb-4 text-gray-800">All Membership</h1>
+
+      <!-- Display Flash Messages -->
+      {% if message %}
+      <div class="alert alert-{{ message[1] }}">{{ message[0] }}</div>
+      {% endif %}
+      
+
+      <div class="card shadow mb-4">
+          <div class="card-header py-3 d-flex justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Membership List</h6>
+              <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#membershipModal" onclick="resetForm()">
+                  Add New Membership
+              </button>
+          </div>
+
+          <div class="card-body">
+              <table class="table table-bordered">
+                  <thead>
+                      <tr>
+                          <th>Membership Type</th>
+                          <th>Price</th>
+                          <th>Duration (Days)</th>
+                          <th>Actions</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for membership in memberships %}
+                        <tr>
+                            <td>{{ membership.membership_type }}</td>
+                            <td>{{ membership.price }}</td>
+                            <td>{{ membership.duration }}</td>
+                            <td>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#membershipModal"
+                                        onclick="fillForm({{ membership.id }})">
+                                    <i class="bx bx-edit-alt"></i>
+                                </button>
+                                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                        onclick="setDeleteId({{ membership.id }})">
+                                    <i class="bx bx-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    
+              </table>
+          </div>
+      </div>
+  </div>
+
+  <!-- Add/Edit Membership Modal -->
+  <div class="modal fade" id="membershipModal" tabindex="-1" aria-labelledby="membershipModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="POST" id="membershipForm" action="{{ url_for('memberships') }}" novalidate>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="membershipModalLabel">Add Membership</h5>
+                    <button type="button" class="btn-close m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="membershipid" id="membershipid" value="0">
+                    <input type="hidden" name="action" id="action" value="insert">
+
+                    <div class="mb-3">
+                        <label for="MembershipType" class="form-label">Membership Type</label>
+                        <input type="text" class="form-control" id="MembershipType" name="MembershipType">
+                        <span class="text-danger" id="MembershipTypeError"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Price" class="form-label">Price</label>
+                        <input type="text" class="form-control" id="Price" name="Price">
+                        <span class="text-danger" id="PriceError"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Duration" class="form-label">Duration (in days)</label>
+                        <input type="number" class="form-control" id="Duration" name="Duration">
+                        <span class="text-danger" id="DurationError"></span>
+                    </div>
+
+                    <button type="submit" name="btnSaveMembership" class="btn btn-primary">Save Membership</button>
+                </div>
+            </div>
+        </form>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Form Validation & Edit -->
+  <script>
+    // Handle form validation
+    document.getElementById('membershipForm').addEventListener('submit', function(event) {
+      clearErrors();
+      let valid = true;
+
+      const membershipType = document.getElementById('MembershipType').value.trim();
+      const price = document.getElementById('Price').value.trim();
+      const duration = document.getElementById('Duration').value.trim();
+
+      if (membershipType === '') {
+          document.getElementById('MembershipTypeError').textContent = 'Membership Type is required';
+          valid = false;
+      }
+      if (price === '' || isNaN(price) || price <= 0) {
+          document.getElementById('PriceError').textContent = 'Valid price is required';
+          valid = false;
+      }
+      if (duration === '' || isNaN(duration) || duration <= 0) {
+          document.getElementById('DurationError').textContent = 'Valid duration is required';
+          valid = false;
+      }
+
+      if (!valid) {
+          event.preventDefault();
+      }
+    });
+
+    function clearErrors() {
+      document.getElementById('MembershipTypeError').textContent = '';
+      document.getElementById('PriceError').textContent = '';
+      document.getElementById('DurationError').textContent = '';
+    }
+
+    // Fill form with existing membership data (edit functionality)
+    function fillForm(id) {
+      const membership = memberships.find(m => m.id === id);
+      if (membership) {
+          document.getElementById('membershipid').value = membership.id;
+          document.getElementById('MembershipType').value = membership.membership_type;
+          document.getElementById('Price').value = membership.price;
+          document.getElementById('Duration').value = membership.duration;
+          document.getElementById('action').value = 'update';
+      }
+    }
+
+    // Remove alert after 3 seconds
+    function removeAlert() {
+      setTimeout(() => {
+          const alert = document.querySelector('.alerts');
+          if (alert) alert.remove();
+      }, 3000);
+    }
+    removeAlert();
+  </script>
+
+  <!-- Footer -->
+  {% include 'layouts/footer.html' %}
+  <!-- / Footer -->
+
+</body>

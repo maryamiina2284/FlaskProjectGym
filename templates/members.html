@@ -1,0 +1,241 @@
+
+   <!-- Header -->
+   {% include 'layouts/header.html' %}
+   <!-- /Header -->
+  
+ 
+
+<body>
+
+ <!-- Sidebar -->
+ {% include 'layouts/sidebar.html' %}
+ <!-- /Sidebar -->
+
+   <!-- topbar -->
+ {% include 'layouts/topbar.html' %}
+ <!-- /topbar -->
+
+     
+<div class="container">
+
+    <!-- Page Heading -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">All members</h1>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="row alerts">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="card-header py-3">
+            <h6 class="m-0 fw-bold text-primary">Member List</h6>
+            <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#memberModal" onclick="reset()">
+                Add Member
+            </button>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Date of Birth</th>
+                            <th>Gender</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                            <th>Member Weight</th>
+                            <th>Membership Type</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="memberTableBody">
+                        {% for member in members %}
+                        <tr>
+                            <td>{{ member.full_name }}</td>
+                            <td>{{ member.date_of_birth }}</td>
+                            <td>{{ member.gender }}</td>
+                            <td>{{ member.phone }}</td>
+                            <td>{{ member.email }}</td>
+                            <td>{{ member.address }}</td>
+                            <td>{{ member.member_weight }}</td>
+                            <td>{{ member.membership_id }}</td>
+                            <td>{{ member.schedule_id }}</td>
+                            <td>{{ member.status }}</td>
+                            <td>
+                                <a href="#member-modal" data-bs-toggle="modal" class="btn btn-primary" onclick="fillForm({{ member.id }})">Edit</a>
+                                <form action="{{ url_for('delete_member') }}" method="POST" style="display:inline;">
+                                    <input type="hidden" name="member_id" value="{{ member.id }}">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="memberModal" tabindex="-1" aria-labelledby="memberModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <form method="POST" action="{{ url_for('members') }}">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="memberModalLabel">Add Member</h5>
+          <button type="button" class="btn-close m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="TypeOfData" value="insert">
+
+          <div class="mb-3">
+            <label for="FullName" class="form-label">Full Name</label>
+            <input type="text" class="form-control" name="FullName" >
+          </div>
+
+          <div class="mb-3">
+            <label for="DateOfBirth" class="form-label">Date of Birth</label>
+            <input type="date" class="form-control" name="DateOfBirth" >
+          </div>
+
+          <div class="mb-3">
+            <label for="Gender" class="form-label">Gender</label>
+            <select name="Gender" class="form-control" >
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="Phone" class="form-label">Phone</label>
+            <input type="text" class="form-control" name="Phone" >
+          </div>
+
+          <div class="mb-3">
+            <label for="Email" class="form-label">Email</label>
+            <input type="email" class="form-control" name="Email" >
+          </div>
+
+          <div class="mb-3">
+            <label for="Address" class="form-label">Address</label>
+            <textarea class="form-control" name="Address" rows="2" ></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="MemberWeight" class="form-label">Weight (kg)</label>
+            <input type="number" class="form-control" name="MemberWeight" step="0.1" >
+          </div>
+
+          <div class="mb-3">
+            <label for="type" class="form-label">Membership Type</label>
+            <select name="type" class="form-control" >
+              {% for m in memberships %}
+              <option value="{{ m.id }}">{{ m.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="time" class="form-label">Schedule</label>
+            <select name="time" class="form-control" >
+              {% for s in schedules %}
+              <option value="{{ s.id }}">{{ s.time }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="Status" class="form-label">Status</label>
+            <select name="Status" class="form-control" >
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary m-3">Save</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function reset() {
+    document.querySelector('.modal-title').textContent = 'Add Member Details';
+    document.getElementById('action').value = 'insert';
+    document.getElementById('memberid').value = 0;
+    document.getElementById('FullName').value = '';
+    document.getElementById('DateOfBirth').value = '';
+    document.getElementById('Gender').value = '';
+    document.getElementById('Phone').value = '';
+    document.getElementById('Email').value = '';
+    document.getElementById('Address').value = '';
+    document.getElementById('MemberWeight').value = '';
+    document.getElementById('MembershipID').value = '';
+    document.getElementById('schedule_id').value = '';
+    document.getElementById('Status').value = '';
+}
+
+function setId(id) {
+    document.getElementById('member_id').value = id;
+}
+
+function fillForm(id) {
+    document.querySelector('.modal-title').textContent = 'Update Member Details';
+    document.getElementById('action').value = 'update';
+    document.getElementById('memberid').value = id;
+
+    $.ajax({
+        url: "/ajax",
+        method: "POST",
+        data: {
+            table: "members",
+            id: id,
+            action: "forUpdate"
+        },
+        success: function(data) {
+            document.getElementById('FullName').value = data.full_name;
+            document.getElementById('DateOfBirth').value = data.date_of_birth;
+            document.getElementById('Gender').value = data.gender;
+            document.getElementById('Phone').value = data.phone;
+            document.getElementById('Email').value = data.email;
+            document.getElementById('Address').value = data.address;
+            document.getElementById('MemberWeight').value = data.member_weight;
+            
+            Array.from(document.getElementById('type').children).forEach(option => {
+                option.value == data.membership_id ? option.selected = true : '';
+            });
+
+            document.getElementById('StartDate').value = data.start_date;  // Haddii aad leedahay
+            document.getElementById('Status').value = data.status;
+        },
+        error: function(xhr, status, error) {
+            console.log(xhr.responseText);
+        }
+    });
+}
+
+</script>
+
+  <!-- Footer -->
+  {% include 'layouts/footer.html' %}
+  <!-- / Footer -->

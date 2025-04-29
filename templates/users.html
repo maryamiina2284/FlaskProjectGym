@@ -1,0 +1,109 @@
+ <!-- Header -->
+   {% include 'layouts/header.html' %}
+   <!-- /Header -->
+  
+ 
+
+<body>
+
+ <!-- Sidebar -->
+ {% include 'layouts/sidebar.html' %}
+ <!-- /Sidebar -->
+
+   <!-- topbar -->
+ {% include 'layouts/topbar.html' %}
+ <!-- /topbar -->
+
+
+ <div class="container mt-5">
+     <h2>All Users</h2>
+     {% with messages = get_flashed_messages(with_categories=true) %}
+         {% if messages %}
+             {% for category, message in messages %}
+                 <div class="alert alert-{{ category }}">{{ message }}</div>
+             {% endfor %}
+         {% endif %}
+     {% endwith %}
+ 
+     <button class="btn btn-primary float-end mb-3" data-bs-toggle="modal" data-bs-target="#userModal">Add User</button>
+ 
+     <table class="table table-bordered">
+         <thead>
+             <tr>
+                 <th>Full Name</th>
+                 <th>Username</th>
+                 <th>Email</th>
+                 <th>Role</th>
+                 <th>Created At</th>
+                 <th>Status</th>
+                 <th>Actions</th>
+             </tr>
+         </thead>
+         <tbody>
+             {% for user in users %}
+             <tr>
+                 <td>{{ user.FullName }}</td>
+                 <td>{{ user.UserName }}</td>
+                 <td>{{ user.Email }}</td>
+                 <td>{{ user.Role }}</td>
+                 <td>{{ user.Created_at }}</td>
+                 <td>{{ user.Status }}</td>
+                 <td>
+                  <form method="POST" action="{{ url_for('update_user', user_id=user.id) }}" style="display:inline;">
+                    <button type="submit" class="btn btn-primary btn-sm">Edit</button>
+                </form>
+                  <form method="POST" action="{{ url_for('delete_user', user_id=user.id) }}" style="display:inline;">
+                      <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                  </form>
+                  
+                  
+              </td>
+              
+             </tr>
+             {% endfor %}
+         </tbody>
+     </table>
+ 
+     <!-- User Modal -->
+     <div class="modal fade" id="userModal" tabindex="-1">
+         <div class="modal-dialog">
+             <form method="POST" action="{{ url_for('add_user') }}">
+                 <div class="modal-content">
+                     <div class="modal-header">
+                         <h5 class="modal-title">Add User</h5>
+                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                     </div>
+                     <div class="modal-body">
+                         <input type="text" name="FullName" class="form-control mb-2" placeholder="Full Name" required>
+                         <input type="text" name="Username" class="form-control mb-2" placeholder="Username" required>
+                         <input type="email" name="Email" class="form-control mb-2" placeholder="Email" required>
+                         <input type="password" name="Password" class="form-control mb-2" placeholder="Password" required>
+                         <select name="Role" class="form-control mb-2">
+                             <option value="Admin">Admin</option>
+                             <option value="User">User</option>
+                         </select>
+                         <select name="Status" class="form-control">
+                             <option value="Active">Active</option>
+                             <option value="Inactive">Inactive</option>
+                         </select>
+                     </div>
+                     <div class="modal-footer">
+                         <button type="submit" class="btn btn-primary">Save</button>
+                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                     </div>
+                 </div>
+             </form>
+         </div>
+     </div>
+ 
+ </div>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+ 
+
+</body>
+</html>
+
+<!-- Footer -->
+  {% include 'layouts/footer.html' %}
+  <!-- / Footer -->
